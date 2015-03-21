@@ -1,6 +1,11 @@
 __author__ = 'Ashley'
 import math
-from utils import Alignment
+from enum import Enum
+
+class Alignment(Enum):
+    Left = 1
+    Center = 2
+    Right = 3
 
 
 class FancyPrint:
