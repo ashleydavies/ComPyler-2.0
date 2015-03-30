@@ -12,12 +12,13 @@ if __name__ == "__main__":
     f_out.line_break()
 
     f_out.line("Creating File Reader for file \"{0}.AScript\"".format("Game"))
-    filereader = FileReader("Game")
-    f_out.line("Successfully opened file: {0}".format(filereader.get_open()))
+    file_reader = FileReader("Game")
+    f_out.line("Successfully opened file: {0}".format(file_reader.get_open()))
     f_out.line_break()
 
     f_out.line("Creating Lexer")
-    lexer = Lexer()
+    lexer = Lexer(file_reader, f_out)
+    lexer.get_lexeme()
 
     f_out.line("Creating Parser")
     parser = Parser()

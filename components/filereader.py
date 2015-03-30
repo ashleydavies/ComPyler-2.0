@@ -1,12 +1,13 @@
 __author__ = 'Ashley'
 
 class FileReader():
-    """ The FileReader class allows the lexer to quickly request new characters
-    """
+    """ The FileReader class allows the lexer to quickly request new characters """
     def __init__(self, file_name):
         self.file_name = file_name
         self.file = open("{0}.AScript".format(file_name))
         self.throwback_char = False
+        self.line_number = 1
+        self.char_number = 0
         self.last_char = -1
 
     def get_char(self):
@@ -17,6 +18,12 @@ class FileReader():
             return self.last_char
         else:
             self.last_char = self.file.read(1)
+            self.char_number += 1
+
+            if self.last_char == "\n":
+                self.increment_line_number()
+                self.char_number = 0
+
             return self.last_char
 
     def return_char(self):
@@ -24,3 +31,6 @@ class FileReader():
 
     def get_open(self):
         return not self.file.closed
+
+    def increment_line_number(self):
+        self.line_number += 1
