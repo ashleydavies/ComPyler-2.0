@@ -1,0 +1,4 @@
+<LETTER> ::= "a" | .. | "z" | "A" | .. | "Z"
+<DIGIT> ::= 1 | .. | 9
+<NUMBER> ::= <DIGIT> | <NUMBER> <DIGIT>
+<FLOAT> ::= <INTEGER> | <NUMBER> . <NUMBER>

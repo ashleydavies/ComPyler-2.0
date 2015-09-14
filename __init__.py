@@ -12,7 +12,7 @@ if __name__ == "__main__":
     f_out.line_break()
 
     f_out.line("Creating File Reader for file \"{0}.AScript\"".format("Game"))
-    file_reader = FileReader("Game")
+    file_reader = FileReader("Test")
     f_out.line("Successfully opened file: {0}".format(file_reader.get_open()))
     f_out.line_break()
 

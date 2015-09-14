@@ -1,7 +1,9 @@
 __author__ = 'Ashley'
 
 class FileReader():
-    """ The FileReader class allows the lexer to quickly request new characters """
+    """
+    The FileReader class allows the lexer to quickly request new characters
+    """
     def __init__(self, file_name):
         self.file_name = file_name
         self.file = open("{0}.AScript".format(file_name))

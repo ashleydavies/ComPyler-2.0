@@ -46,6 +46,7 @@ class FancyPrint:
         space = (self.box_width - len(out_text)) / 2
         left_space = math.floor(space)
         right_space = math.ceil(space)
+
         if alignment == Alignment.Left:
             right_space += left_space - local_alignment_padding
             left_space = local_alignment_padding

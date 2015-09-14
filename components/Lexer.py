@@ -1,10 +1,11 @@
 from components.filereader import FileReader
 from utils.fancyprint import FancyPrint
+import string
 __author__ = 'Ashley'
 
 
 class Lexer():
-    """ The Lexer is a mystical tool from the realms of Gondor that turns a file into meaningful tokens """
+    """ Turns a file into meaningful tokens """
     def __init__(self, file_reader: FileReader, output: FancyPrint):
         self.file_reader = file_reader
         self.output = output
@@ -39,6 +40,13 @@ class Lexer():
                 self.output.line("[String Literal] {0}".format(string_literal))
             elif read_char in ["+", "-", "/", "*", "=", "!", "$", "^", "&"]:
                 self.output.line("[Operator Literal] {0}".format(read_char))
+            elif read_char in ["_"] + list(string.ascii_letters):
+                identifier = read_char
+                read_char = self.file_reader.get_char()
+                while read_char in string.ascii_letters:
+                    identifier += read_char
+                    read_char = self.file_reader.get_char()
+                self.output.line("[Identifier literal] {0}".format(identifier))
             elif read_char == "":
                 self.output.line("End of file reached")
                 # EOF reached
