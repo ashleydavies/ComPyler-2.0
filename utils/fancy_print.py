@@ -32,6 +32,7 @@ class FancyPrint:
         exit()
 
     def line(self, out_text, alignment=Alignment.Left, alignment_padding=1, runon=False):
+        out_text = str(out_text)
         local_alignment_padding = alignment_padding
 
         if runon:
