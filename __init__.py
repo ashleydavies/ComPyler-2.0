@@ -1,6 +1,6 @@
 __author__ = 'Ashley'
 from components.lexer import Lexer
-from components.operators import OperatorPrecedence
+from components.operators import Operator
 from components.parser import Parser
 from components.lexeme import Lexeme
 from components.filereader import FileReader
@@ -10,7 +10,7 @@ from utils.fancy_print import Alignment
 def e2s(tree):
     if type(tree) is Lexeme:
         return tree
-    elif tree.node in OperatorPrecedence:
+    elif type(tree.node) is Operator:
         return "({0}) {1} ({2})".format(e2s(tree.left), tree.node.getLiteral(), e2s(tree.right))
     else:
         return tree.node
@@ -21,8 +21,10 @@ if __name__ == "__main__":
     f_out.line("ComPyler 2.0 - AScript", Alignment.Center)
     f_out.line_break()
 
-    f_out.line("Creating File Reader for file \"{0}.AScript\"".format("Game"))
-    file_reader = FileReader("Test")
+    file = "Test"
+
+    f_out.line("Creating File Reader for file \"{0}.AScript\"".format(file))
+    file_reader = FileReader(file)
     f_out.line("Successfully opened file: {0}".format(file_reader.get_open()))
     f_out.line_break()
     f_out.line("Creating Lexer")
@@ -47,7 +49,9 @@ if __name__ == "__main__":
 
     parser = Parser(lexemes, f_out)
     parser.parse()
-    f_out.line(e2s(parser.tree.left.node[0]))
+
+    for x in parser.tree.left:
+        f_out.line(e2s(x))
 
     f_out.line("")
     f_out.line("End")
