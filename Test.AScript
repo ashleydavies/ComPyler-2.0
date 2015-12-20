@@ -1,4 +1,20 @@
-x = 5.4 + 6.2 * 3 + 3 + 4 + 5+ 6+ 7+ 7.92
+import "Maths"
+
+x = 5.4 + 6.2 * (3 + 3 + add(4, 7)) + 7.92
 y = 7 * 3
 z = 9 + 4
-print("hello")
+sum = x + y + z
+print(concat("Hello, ", "World!"), "arg2", 7 * 4 + 3)
+bool = true
+
+if bool == true then {
+    print("Hello world")
+
+    if bool == false then {
+        print("Wow, impossible!")
+
+        if y * 2 == 26 then {
+            print("Good maths")
+        }
+    }
+}

@@ -5,6 +5,9 @@ from components.operators import Operator
 from utils.fancy_print import FancyPrint
 import string
 
+lexable_operators = ["+", "-", "/", "*", ",", "=", "!", "$", "^", "&", "{", "}", "(", ")"]
+lexable_repeatable_operators = ["+", "-", "/", "*", "=", "!"]
+
 class Lexer():
     """ Turns a file into meaningful tokens """
     def __init__(self, file_reader: FileReader, output: FancyPrint, debug: bool = False):
@@ -49,18 +52,19 @@ class Lexer():
                 if self.debug:
                     self.output.line("[String Literal] {0}".format(string_literal))
                 return Lexeme(LexemeType.string, string_literal)
-            elif read_char in ["+", "-", "/", "*", "=", "!", "$", "^", "&", "{", "}"]:
+            elif read_char in lexable_operators:
                 if self.debug:
                     self.output.line("[Operator Literal] {0}".format(read_char))
 
-                op = None
+                operator_literal = read_char
+                read_char = self.file_reader.get_char()
+                while read_char in lexable_repeatable_operators:
+                    operator_literal += read_char
+                    read_char = self.file_reader.get_char()
 
-                if read_char == "=":
-                    op = Operator.EQUALS
-                elif read_char == "+":
-                    op = Operator.ADD
-                elif read_char == "*":
-                    op = Operator.MULT
+                self.file_reader.return_char()
+
+                op = Operator.fromLiteral(operator_literal)
 
                 return Lexeme(LexemeType.operator, op)
             elif read_char in ["_"] + list(string.ascii_letters):
@@ -69,8 +73,16 @@ class Lexer():
                 while read_char in string.ascii_letters:
                     identifier += read_char
                     read_char = self.file_reader.get_char()
+                self.file_reader.return_char()
                 if self.debug:
                     self.output.line("[Identifier literal] {0}".format(identifier))
+
+                if identifier in ["true", "false"]:
+                    return Lexeme(LexemeType.boolean, identifier)
+
+                if identifier in SpecialIdentifiers:
+                    return Lexeme(LexemeType.special_identifier, identifier)
+
                 return Lexeme(LexemeType.identifier, identifier)
             elif read_char == "":
                 if self.debug:
