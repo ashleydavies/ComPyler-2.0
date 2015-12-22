@@ -1,15 +1,17 @@
 __author__ = 'Ashley'
 from utils.fancy_print import FancyPrint
+from utils.unary_tree import UnaryTree
 from utils.binary_tree import BinaryTree
+from utils.trinary_tree import TrinaryTree
 from components.lexer import *
 from components.lexeme import *
 
 class Parser():
-    """ Accepts a lexer and creates an abstract syntax tree by requesting lexemes """
+    """ Accepts a list of lexemes and creates an abstract syntax tree by traversing over them """
     def __init__(self, lexemes: [Lexeme], output: FancyPrint):
         self.output = output
         self.lexemes = lexemes
-        self.tree = BinaryTree("PROGRAM")
+        self.tree = UnaryTree("PROGRAM", [])
         self.treeNode = self.tree
 
     def parse(self):
@@ -27,16 +29,22 @@ class Parser():
         if lex.token_type == LexemeType.identifier:
             next = self.lexeme_peek()
             if next.token_type == LexemeType.operator and next.token_value == Operator.EQUALS:
-                self.treeNode.left.append(BinaryTree(self.lexeme_get().token_value, lex, self.expr()))
+                self.treeNode.center.append(BinaryTree(self.lexeme_get().token_value, lex, self.expr()))
             else:
-                self.treeNode.left.append(self.call(lex))
+                self.treeNode.center.append(self.call(lex))
         elif lex.token_type == LexemeType.special_identifier:
             if lex.token_value == "if":
                 self.ifstmt()
             elif lex.token_value == "import":
                 name = self.lexeme_get()
                 assert name.token_type == LexemeType.string
-                self.treeNode.left.append(BinaryTree("IMPORT", name.token_value))
+                self.treeNode.center.append(BinaryTree("IMPORT", name.token_value))
+            elif lex.token_value == "function":
+                identifier = self.lexeme_get()
+                assert identifier.token_type == LexemeType.identifier
+                self.treeNode.center.append(self.funcdef(identifier))
+            elif lex.token_value == "return":
+                self.treeNode.center.append(UnaryTree("RETURN", self.expr()))
 
     def match(self, lexeme):
         assert lexeme == self.lexeme_get()
@@ -55,15 +63,36 @@ class Parser():
         self.match(Lexeme(LexemeType.operator, Operator.R_PAREN))
         return tree
 
+    def funcdef(self, identifier):
+        oldTree = self.treeNode
+        self.treeNode = TrinaryTree("FUNCDEF", identifier, [])
+
+        self.match(Lexeme(LexemeType.operator, Operator.L_PAREN))
+
+        while self.lexeme_peek().token_value != Operator.R_PAREN:
+            self.treeNode.center.append(self.expr())
+            if self.lexeme_peek().token_value == Operator.COMMA:
+                self.lexeme_get()
+            else:
+                break
+
+        self.match(Lexeme(LexemeType.operator, Operator.R_PAREN))
+
+        self.treeNode.right = self.block()
+
+        newTree = self.treeNode
+        self.treeNode = oldTree
+        return newTree
+
+
     def ifstmt(self):
         cond = self.expr()
-        self.match(Lexeme(LexemeType.special_identifier, "then"))
         block = self.block()
-        self.treeNode.left.append(BinaryTree("IF", cond, block))
+        self.treeNode.center.append(BinaryTree("IF", cond, block))
 
     def block(self):
         oldTree = self.treeNode
-        self.treeNode = BinaryTree("BLOCK", [], None)
+        self.treeNode = UnaryTree("BLOCK", [])
         self.match(Lexeme(LexemeType.operator, Operator.CURLY_BEGIN))
 
         while self.lexeme_peek().token_value != Operator.CURLY_END:

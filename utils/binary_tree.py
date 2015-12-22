@@ -1,6 +1,8 @@
+from utils.tree import Tree
+
 __author__ = 'Ashley'
 
-class BinaryTree():
+class BinaryTree(Tree):
     """ As it says on the tin """
     def __init__(self, node, left = None, right = None):
         self.node = node

@@ -1,5 +1,9 @@
 import "Maths"
 
+function add(x, y) {
+    return x + y
+}
+
 x = 5.4 + 6.2 * (3 + 3 + add(4, 7)) + 7.92
 y = 7 * 3
 z = 9 + 4
@@ -7,13 +11,20 @@ sum = x + y + z
 print(concat("Hello, ", "World!"), "arg2", 7 * 4 + 3)
 bool = true
 
-if bool == true then {
+if bool == true {
     print("Hello world")
 
-    if bool == false then {
+    if bool == false {
         print("Wow, impossible!")
 
-        if y * 2 == 26 then {
+        function impossible() {
+            print("You can get anything from falsity! Have 50 coins :))")
+            return 50
+        }
+
+        print(impossible())
+
+        if y * 2 == 26 {
             print("Good maths")
         }
     }

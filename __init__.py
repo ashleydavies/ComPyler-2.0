@@ -7,18 +7,27 @@ from components.lexeme import Lexeme
 from components.filereader import FileReader
 from utils.fancy_print import FancyPrint
 from utils.fancy_print import Alignment
+from utils.unary_tree import UnaryTree
 from utils.binary_tree import BinaryTree
+from utils.trinary_tree import TrinaryTree
 
-def e2s(tree):
+def e2s(tree,level=0):
+    pre = "\n" + " " * level + "> "
+    opPre = "\n" + " " * (level + 1) + "OP "
     if type(tree) is Lexeme:
-        return tree.__str__()
+        return pre + tree.__str__()
+    elif type(tree) is UnaryTree:
+        return pre + "{0} {1}".format(tree.node, e2s(tree.center, level + 1))
     elif type(tree) is BinaryTree:
         if type(tree.node) is Operator:
-            return "({0}) {1} ({2})".format(e2s(tree.left), tree.node.getLiteral(), e2s(tree.right))
+            return pre + "{0} {1} {2}".format(e2s(tree.left, level + 1), tree.node.getLiteral(), e2s(tree.right, level + 1))
         else:
-            return "{0} ({1}) ({2})".format(tree.node, e2s(tree.left), e2s(tree.right))
+            return pre + "{0} {1} {2}".format(tree.node, e2s(tree.left, level + 1), e2s(tree.right, level + 1))
+    elif type(tree) is TrinaryTree:
+        return pre + "{0} {1} {2} {3}".format(tree.node, e2s(tree.left, level + 1), e2s(tree.center, level + 1), e2s(tree.right, level + 1))
+
     elif isinstance(tree, list):
-        return [e2s(x) for x in tree]
+        return "".join([e2s(x, level) for x in tree])
     else:
         return tree
 
@@ -57,8 +66,7 @@ if __name__ == "__main__":
     parser = Parser(lexemes, f_out)
     parser.parse()
 
-    for x in parser.tree.left:
-        f_out.line(e2s(x))
+    print(e2s(parser.tree))
 
     f_out.line("")
     f_out.line("End")
