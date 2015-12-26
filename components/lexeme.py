@@ -1,7 +1,13 @@
 __author__ = 'Ashley'
 from enum import Enum
 
-SpecialIdentifiers = ["function", "import", "if", "then", "return"]
+SpecialIdentifiers = ["import",
+                      "null",
+                      "if", "elseif", "else",
+                      "function", "return",
+                      "while", "do",
+                      "for", "to", "in",
+                      "and", "or"]
 
 class LexemeType(Enum):
     identifier         = 1,

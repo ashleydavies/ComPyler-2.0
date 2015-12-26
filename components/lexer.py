@@ -5,7 +5,7 @@ from components.operators import Operator
 from utils.fancy_print import FancyPrint
 import string
 
-lexable_operators = ["+", "-", "/", "*", ",", "=", "!", "$", "^", "&", "{", "}", "(", ")"]
+lexable_operators = ["+", "-", "/", "*", ",", "=", "!", "$", "^", "&", "{", "}", "(", ")", "<", ">"]
 lexable_repeatable_operators = ["+", "-", "/", "*", "=", "!"]
 
 class Lexer():

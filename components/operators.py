@@ -8,10 +8,12 @@ class Operator(Enum):
     MULT         = 4
     L_PAREN      = 5
     R_PAREN      = 6
-    CURLY_BEGIN  = 7
-    CURLY_END    = 8
-    COMMA        = 9
-    EQUALITY     = 10
+    L_CURLY      = 7
+    R_CURLY      = 8
+    L_SQUARE     = 9
+    R_SQUARE     = 10
+    COMMA        = 11
+    EQUALITY     = 12
 
     @staticmethod
     def fromLiteral(operator):
@@ -29,8 +31,10 @@ OperatorLiterals = {
     "*": Operator.MULT,
     "(": Operator.L_PAREN,
     ")": Operator.R_PAREN,
-    "{": Operator.CURLY_BEGIN,
-    "}": Operator.CURLY_END,
+    "{": Operator.L_CURLY,
+    "}": Operator.R_CURLY,
+    "[": Operator.L_SQUARE,
+    "]": Operator.R_SQUARE,
     ",": Operator.COMMA,
     "==": Operator.EQUALITY,
     "<-->": Operator.SENTINEL,
@@ -40,8 +44,8 @@ OperatorPrecedence = {
     Operator.SENTINEL: 0,
     Operator.L_PAREN:  1,
     Operator.R_PAREN:  1,
+    Operator.EQUALITY: 1,
     Operator.EQUALS:   2,
     Operator.ADD:      5,
     Operator.MULT:     10,
-    Operator.EQUALITY: 50
 }
